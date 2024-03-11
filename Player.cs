@@ -15,6 +15,10 @@ public class Player : MonoBehaviour
 
     public Camera cam;
 
+    [SerializeField] private float projectileSpeed;
+    [SerializeField] private Projectile projectilePrefab;
+
+
     void Start()
     {
 
@@ -26,10 +30,10 @@ public class Player : MonoBehaviour
        float moveZ = Input.GetAxis("Vertical") * speed * Time.deltaTime; //Vertical input
        transform.position += new Vector3(moveX, 0, moveZ); //Movement
 
-        //Camera looking at the cursdor
+        //Camera looking at the cursor
         Vector3 point = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1));
         float t = cam.transform.position.y / (cam.transform.position.y - point.y);
-        Vector3 finalPoint = new Vector3(t * (point.x - cam.transform.position.x) + cam.transform.position.x, 1, t * (point.z - cam.transform.position.z) + cam.transform.position.z);
+        Vector3 finalPoint = new Vector3(t * (point.x - cam.transform.position.x) + cam.transform.position.x, transform.position.y, t * (point.z - cam.transform.position.z) + cam.transform.position.z);
         transform.LookAt(finalPoint, Vector3.up);
 
 
@@ -51,6 +55,17 @@ public class Player : MonoBehaviour
             else
             {
                 hearts[i].enabled = false;
+            }
+        }
+
+        if(!PauseMenu.isPaused)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+               var position = transform.position + transform.forward;
+               var rotation = transform.rotation;
+               var projectile = Instantiate(projectilePrefab, position, rotation);
+               projectile.Fire(projectileSpeed, transform.forward);
             }
         }
 

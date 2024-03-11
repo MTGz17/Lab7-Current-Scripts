@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public int damage = 20; //Damage variable
-    public float speed = 2f; //Enemy movement speed slower than player
+    public int damage; //Damage variable
+    public float speed; //Enemy movement speed slower than player
+    public int enemyHealth;
     private Transform player;
+    
 
     void Start()
     {
@@ -19,12 +21,24 @@ public class Enemy : MonoBehaviour
         transform.position += direction * speed * Time.deltaTime;
     }
     
-    void OnTriggerEnter(Collider other) //Initiates damage NOTE: Most have rigid body enabled on 'Player' & most have 'Enemy' as trigger
+    void OnTriggerEnter(Collider other) //Initiates damage NOTE: Most have rigid body enabled on 'Player' & must have 'Enemy' as trigger
     {
         if (other.gameObject.CompareTag("Player"))
         {
             Player playerScript = other.gameObject.GetComponent<Player>();
             playerScript.Damage(damage);
+
+            Destroy(gameObject);
+        }
+
+        if (other.gameObject.CompareTag("Projectile"))
+        {
+            enemyHealth = enemyHealth - 1;
+            
+            if(enemyHealth == 0)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }
