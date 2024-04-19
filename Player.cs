@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     public float speed = 3.0f; //Movement speed, faster than enemy
     public int health = 3; //Health, has room to take damage
     public int maxHealth;
+    public AudioClip blaster;
 
     public Sprite emptyHeart;
     public Sprite fullHeart;
@@ -18,10 +19,16 @@ public class Player : MonoBehaviour
     [SerializeField] private float projectileSpeed;
     [SerializeField] private Projectile projectilePrefab;
 
+    AudioSource audioSource;
+
+    public bool Shotgun;
+    public bool Sniper;
+    public bool Duel;
+
 
     void Start()
     {
-
+        audioSource= GetComponent<AudioSource>();
     }
 
     void Update()
@@ -66,9 +73,15 @@ public class Player : MonoBehaviour
                var rotation = transform.rotation;
                var projectile = Instantiate(projectilePrefab, position, rotation);
                projectile.Fire(projectileSpeed, transform.forward);
+               PlaySound(blaster);
             }
         }
 
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        audioSource.PlayOneShot(clip);
     }
     
     public void Damage(int damage) //Damage method by subtracting damage from health

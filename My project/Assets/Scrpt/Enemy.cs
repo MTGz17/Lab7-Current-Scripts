@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     public int damage; //Damage variable
     public float speed; //Enemy movement speed slower than player
     public int enemyHealth;
+    public int points;
     private Transform player;
     
 
@@ -37,6 +38,7 @@ public class Enemy : MonoBehaviour
             
             if(enemyHealth == 0)
             {
+                ScoreScript.scoreValue += points;
                 Destroy(gameObject);
             }
         }

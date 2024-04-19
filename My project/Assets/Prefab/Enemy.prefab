@@ -147,5 +147,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
-  speed: 5
-  enemyHealth: 5
+  speed: 3
+  enemyHealth: 1
+  points: 50
