@@ -6,11 +6,11 @@ public class Week7Plane : MonoBehaviour
 {
 
     public float length, height;
-    [SerializeField] private GameObject prefab;
+    [SerializeField] private GameObject planePrefab;
+    public GameObject[] enemyPrefabs;
 
     void Start()
     {
-
         CreateGround();
         InvokeRepeating("SpawnObject", 1, 1.5f);
     }
@@ -18,17 +18,17 @@ public class Week7Plane : MonoBehaviour
     void CreateGround()
     {
         Vector3 worldOrigin = new Vector3(0, 0, 0);
-        GameObject plane  = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        GameObject plane  = Instantiate(planePrefab);
 
         plane.transform.localScale = new Vector3 (length, 1, height);
-        var planeRenderer = plane.GetComponent<Renderer>();
-        planeRenderer.material.SetColor("_Color", Color.black);
 
     }
 
     public void SpawnObject()
     {  
-        GameObject prefabGameObject = Instantiate(prefab);
+        int randomEnemyGenerator;
+        randomEnemyGenerator = Random.Range(0, 4);
+        GameObject prefabGameObject = Instantiate(enemyPrefabs[randomEnemyGenerator]);
         
         int generator;
         generator = Random.Range(0, 4);
