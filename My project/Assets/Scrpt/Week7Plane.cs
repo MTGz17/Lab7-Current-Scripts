@@ -5,7 +5,8 @@ using UnityEngine;
 public class Week7Plane : MonoBehaviour
 {
 
-    public float length, height;
+    public float length;
+    public float height;
     [SerializeField] private GameObject planePrefab;
     public GameObject[] enemyPrefabs;
 
@@ -20,7 +21,7 @@ public class Week7Plane : MonoBehaviour
         Vector3 worldOrigin = new Vector3(0, 0, 0);
         GameObject plane  = Instantiate(planePrefab);
 
-        plane.transform.localScale = new Vector3 (length, 1, height);
+        plane.transform.localScale = new Vector3 (length+5, 1, height+2.5f);
 
     }
 

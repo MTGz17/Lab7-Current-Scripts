@@ -6,11 +6,12 @@ public class Projectile : MonoBehaviour
 {
     
     private Rigidbody _rb;
-
+    public bool Sniper;
+    public int Points;
     // Start is called before the first frame update
     void Start()
     {
-        
+        Sniper = false;
     }
 
     private void Awake()
@@ -34,6 +35,19 @@ public class Projectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Destroy(gameObject, 3);
+        Points = ScoreScript.scoreValue;
+        if((Points >= 500))
+            {
+                Sniper = true;
+            }
+
+        if(Sniper == true)
+        {
+                Destroy(gameObject, 2f);
+        }
+        if(Sniper == false)
+        {
+                Destroy(gameObject, .75f);
+        }
     }
 }

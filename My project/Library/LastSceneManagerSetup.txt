@@ -1,6 +1,6 @@
 sceneSetups:
 - path: Assets/Scenes/Main Menu.unity
-  isLoaded: 0
+  isLoaded: 1
   isActive: 0
   isSubScene: 0
 - path: Assets/Scenes/Level_1.unity
@@ -8,6 +8,6 @@ sceneSetups:
   isActive: 1
   isSubScene: 0
 - path: Assets/Scenes/EndGame.unity
-  isLoaded: 0
+  isLoaded: 1
   isActive: 0
   isSubScene: 0

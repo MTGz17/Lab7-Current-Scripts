@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -21,14 +22,26 @@ public class Player : MonoBehaviour
 
     AudioSource audioSource;
 
+    public int Points;
     public bool Shotgun;
-    public bool Sniper;
     public bool Duel;
 
+    public Week7Plane script;
+
+    public float cooldown;
+    float lastShot;
+
+    public Transform forward;
+    public Transform left;
+    public Transform right;
+    public Transform backward;
 
     void Start()
     {
         audioSource= GetComponent<AudioSource>();
+        Shotgun = false;
+        Duel = false;
+        Debug.Log(script.height);
     }
 
     void Update()
@@ -36,6 +49,23 @@ public class Player : MonoBehaviour
        float moveX = Input.GetAxis("Horizontal") * speed * Time.deltaTime; //Horizontal input
        float moveZ = Input.GetAxis("Vertical") * speed * Time.deltaTime; //Vertical input
        transform.position += new Vector3(moveX, 0, moveZ); //Movement
+
+       if(transform.position.x >= ((script.length*1.5f)*2))
+       {
+            transform.position = new Vector3(((script.length*1.5f)*2), 1, transform.position.z);
+       }
+       if(transform.position.x <= -((script.length*1.5f)*2))
+       {
+            transform.position = new Vector3(-((script.length*1.5f)*2), 1, transform.position.z);
+       }
+       if(transform.position.z >= ((script.height*1.5f)*2))
+       {
+            transform.position = new Vector3(transform.position.x, 1, ((script.height*1.5f)*2));
+       }
+       if(transform.position.z <= -((script.height*1.5f)*2))
+       {
+            transform.position = new Vector3(transform.position.x, 1, -((script.height*1.5f)*2));
+       }
 
         //Camera looking at the cursor
         Vector3 point = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1));
@@ -69,14 +99,39 @@ public class Player : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-               var position = transform.position + transform.forward;
+               if(Time.time-lastShot<cooldown)
+                {
+                    return;
+                }
+                lastShot = Time.time;
                var rotation = transform.rotation;
-               var projectile = Instantiate(projectilePrefab, position, rotation);
+               var projectile = Instantiate(projectilePrefab, forward.position, rotation);
                projectile.Fire(projectileSpeed, transform.forward);
                PlaySound(blaster);
+               if(Duel == true)
+               {
+                var projectileback = Instantiate(projectilePrefab, backward.position, rotation);
+                projectileback.Fire(projectileSpeed, -(transform.forward));
+               }
+               if(Shotgun == true)
+               {
+                var projectileleft = Instantiate(projectilePrefab, left.position, rotation);
+                projectileleft.Fire(projectileSpeed, transform.forward);
+                var projectileright = Instantiate(projectilePrefab, right.position, rotation);
+                projectileright.Fire(projectileSpeed, transform.forward);
+               }
             }
         }
 
+        Points = ScoreScript.scoreValue;
+        if((Points >= 1000))
+            {
+                Duel = true;
+            }
+        if((Points >= 1500))
+            {
+                Shotgun = true;
+            }
     }
 
     public void PlaySound(AudioClip clip)
@@ -96,8 +151,6 @@ public class Player : MonoBehaviour
 
     public void GameOver()
     {
-        Debug.Log("Game Over");
-
-        Application.Quit(); //Only works in built version of game
+        SceneManager.LoadScene("EndGame");
     }
 }
